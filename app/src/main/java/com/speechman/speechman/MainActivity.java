@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             URL urlObj = null;
 
             try {
-                urlObj = new URL("http://ef5b6b57.ngrok.io/" + command.replaceAll(" ", "%20"));
+                urlObj = new URL("http://9d59468f.ngrok.io/" + command.replaceAll(" ", "%20"));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
