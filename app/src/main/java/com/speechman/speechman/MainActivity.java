@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             URL urlObj = null;
 
             try {
-                urlObj = new URL("http://fd8c7bce.ngrok.io/" + command.replaceAll(" ", "%20"));
+                urlObj = new URL("http://ef5b6b57.ngrok.io/" + command.replaceAll(" ", "%20"));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -105,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
                     while((readLine = br.readLine()) != null) {
                         res.append(readLine);
                     }
-                    Log.d("TAG", res.toString());
                     return res.toString();
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(activity, "IO Exception", Toast.LENGTH_LONG).show();
                 } finally {
                     if (urlConnection != null) {
                         urlConnection.disconnect();
@@ -127,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
             if (pdialog != null && pdialog.isShowing()) {
                 pdialog.dismiss();
             }
+
+            Toast.makeText(activity, "Result: " + res, Toast.LENGTH_SHORT).show();
         }
     }
 }
