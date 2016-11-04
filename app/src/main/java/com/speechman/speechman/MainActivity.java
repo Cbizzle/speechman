@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final int SPEECH_CODE = 100;
 
+    private EditText serverurlEditText = null;
     private TextView speechOutputTextview = null;
     private ImageButton micButton = null;
 
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        serverurlEditText = (EditText)findViewById(R.id.serverurlEditText);
         speechOutputTextview = (TextView)findViewById(R.id.spokenWordsTextview);
         micButton = (ImageButton)findViewById(R.id.micIntentButton);
 
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 String speechText = result.get(0); //most confidence here
                 speechOutputTextview.setText(speechText);
 
-                new SendCommandTask(this, speechText).execute();  //executes command to ESP8266
+                new SendCommandTask(this, speechText, serverurlEditText.getText().toString()).execute();  //executes command to ESP8266
             }
         }
     }
@@ -70,10 +73,12 @@ public class MainActivity extends AppCompatActivity {
         Context activity;
         ProgressDialog pdialog;
         String command;
+        String urlString;
 
-        SendCommandTask(Context a, String command) {
+        SendCommandTask(Context a, String command, String urlString) {
             activity = a;
             this.command = command;
+            this.urlString = urlString;
         }
 
         @Override
@@ -89,9 +94,11 @@ public class MainActivity extends AppCompatActivity {
             URL urlObj = null;
 
             try {
-                urlObj = new URL("http://9d59468f.ngrok.io/" + command.replaceAll(" ", "%20"));
+                //urlObj = new URL("https://80ae09d8.ngrok.io/" + command.replaceAll(" ", "%20"));
+                urlObj = new URL(urlString + command.replaceAll(" ", "%20"));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                Toast.makeText(activity, "Malformed url", Toast.LENGTH_LONG).show();
             }
 
             if (urlObj != null) { //make the connection and return response
